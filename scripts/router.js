@@ -38,35 +38,47 @@ router.setState = function(state) {
    *    2. You may modify the parameters of setState() as much as you like
    */
 
-    console.log(state);
+    //console.log(state);
     var body = document.querySelector('body');
     var title = document.querySelector('h1');
-    var entryPage = document.querySelector('entry-page');
 
     if (state == "settings") {
-      history.pushState("settings", "Settings", "#settings");
+      let title = document.querySelector('h1');
+      if (history.state != state) {
+        history.pushState("settings", "Settings", "#settings");
+      }
       body.className = "settings";
       title.innerHTML = "Settings";
     }
 
     else if (state == "home") {
-      history.pushState("home", "Journal Entries", "");
+      let title = document.querySelector('h1');
+      if (history.state != state) {
+        history.pushState("home", "Journal Entries", " ");
+      }
       body.className = "home";
       title.innerHTML = "Journal Entries";
     }
 
     else {
-      console.log(entries);
-      //let entryNum = entries.indexOf(state);
-      //history.pushState("entry", "entry", "#entry" + entryNum)
-      console.log(entryPage);
+      console.log("Loading entry");
+      let id = state;
+      let entry = entries[id - 1];
+      if (history.state != state) {
+        history.pushState(state, "entry", "#entry" + id);
+      }
       body.className = "single-entry";
-      //title.innerHTML = "Entry" + entryNum;
-      entryPage.entry = state.entry;
-    }
 
+      title.innerHTML = "Entry " + id;
+
+      let entryPage = document.createElement('entry-page');
+      entryPage.entry = entry;
+
+      body.removeChild(document.querySelector("entry-page"));
+      body.appendChild(entryPage);
+    }
 }
 
 router.setEntries = function(pentries) {
-  this.entries = pentries;
+  entries = pentries;
 }
